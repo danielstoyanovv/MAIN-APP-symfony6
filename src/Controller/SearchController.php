@@ -15,8 +15,13 @@ use Symfony\Component\Serializer\SerializerInterface;
 class SearchController extends AbstractController
 {
     #[Route('/api/search/{term}', name: 'api_search')]
-    public function search(EntityManagerInterface $entityManager, Request $request, LoggerInterface $logger,
-                                 SerializerInterface $serializer, SearchService $searchService): Response
+    public function search(
+        EntityManagerInterface $entityManager,
+        Request $request,
+        LoggerInterface $logger,
+        SerializerInterface $serializer,
+        SearchService $searchService
+    ): Response
     {
         try {
             if ($request->getMethod() === 'POST') {

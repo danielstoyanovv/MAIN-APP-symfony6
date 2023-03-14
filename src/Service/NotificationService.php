@@ -8,7 +8,6 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 class NotificationService
 {
-
     /**
      * @var HttpClientInterface
      */
@@ -116,14 +115,15 @@ class NotificationService
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    public  function createNotification(array $data, string $notificationAppUrl)
+    public function createNotification(array $data, string $notificationAppUrl)
     {
         $notification = null;
 
         if ($token = $this->getToken($notificationAppUrl)) {
             $notificationResponseJson = $this->client->request(
                 "POST",
-                $this->getNotificationAppApiUrl($notificationAppUrl),                [
+                $this->getNotificationAppApiUrl($notificationAppUrl),
+                [
                     "headers" => [
                         "Content-Type" => "application/ld+json",
                         "accept" => "application/ld+json",
@@ -179,7 +179,6 @@ class NotificationService
             if ($notificationsData) {
                 $notifications = $notificationsData;
             }
-
         }
 
         return $notifications;
@@ -264,7 +263,7 @@ class NotificationService
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    public function sendSystemMessage(string $content, int $registeredUserId,  string $apiUrl)
+    public function sendSystemMessage(string $content, int $registeredUserId, string $apiUrl)
     {
         $notificationData = [];
         $notificationData['content'] = $content;

@@ -14,7 +14,8 @@ class ApiTokenManager
      */
     private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager) {
+    public function __construct(EntityManagerInterface $entityManager)
+    {
         $this->entityManager = $entityManager;
     }
 
@@ -48,6 +49,5 @@ class ApiTokenManager
         unset($tokenData->password);
 
         return $tokenData;
-
     }
 }

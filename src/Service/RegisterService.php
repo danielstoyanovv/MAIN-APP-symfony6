@@ -25,8 +25,12 @@ class RegisterService
      */
     private $userPasswordHasher;
 
-    public function __construct(EntityManagerInterface $entityManager, ValidatorInterface $validator,
-                                UserPasswordHasherInterface $userPasswordHasher) {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        ValidatorInterface $validator,
+        UserPasswordHasherInterface $userPasswordHasher
+    )
+    {
         $this->entityManager = $entityManager;
         $this->validator = $validator;
         $this->userPasswordHasher = $userPasswordHasher;
@@ -53,7 +57,6 @@ class RegisterService
                 "Email '%s' is registered already",
                 $data['email']
             );
-
         }
 
         if (empty($data['firstName'])) {
@@ -81,7 +84,6 @@ class RegisterService
      */
     private function checkIfEmailisValid(string $email): bool
     {
-
         if ($this->validator->validate($email, new Email())->count() > 0) {
             return false;
         }
@@ -107,7 +109,7 @@ class RegisterService
      * @param array $data
      * @return User
      */
-    public  function createUser(array $data): User
+    public function createUser(array $data): User
     {
         $user = new User();
         $user->setFirstName($data['firstName'])

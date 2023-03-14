@@ -2,12 +2,9 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\GetCollection;
 use App\Repository\ApiTokenRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
-use App\Repository\NotificationRepository;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
 use Symfony\Component\Validator\Constraints as Assert;

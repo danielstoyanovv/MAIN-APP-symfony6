@@ -18,8 +18,15 @@ use Symfony\Component\Serializer\SerializerInterface;
 class LoginController extends AbstractController
 {
     #[Route('/api/login', name: 'api_login')]
-    public function login(EntityManagerInterface $entityManager, Request $request, LoggerInterface $logger,
-                                 UserPasswordHasherInterface $hasher, TokenGenerator $tokenGenerator, SerializerInterface $serializer, ApiTokenManager $apiTokenManager): Response
+    public function login(
+        EntityManagerInterface $entityManager,
+        Request $request,
+        LoggerInterface $logger,
+        UserPasswordHasherInterface $hasher,
+        TokenGenerator $tokenGenerator,
+        SerializerInterface $serializer,
+        ApiTokenManager $apiTokenManager
+    ): Response
     {
         try {
             if ($request->getMethod() === 'POST') {
@@ -36,13 +43,13 @@ class LoginController extends AbstractController
 
                         return $response;
                     } else {
-                        $response = new JsonResponse( "Invalid credential");
+                        $response = new JsonResponse("Invalid credential");
                         $response->setStatusCode(422);
 
                         return $response;
                     }
                 } else {
-                    $response = new JsonResponse( "'email' and 'password' are required field");
+                    $response = new JsonResponse("'email' and 'password' are required field");
                     $response->setStatusCode(422);
 
                     return $response;

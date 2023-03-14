@@ -17,9 +17,15 @@ use App\Service\NotificationService;
 class RegisterController extends AbstractController
 {
     #[Route('/api/register', name: 'api_register')]
-    public function register(EntityManagerInterface $entityManager, Request $request, LoggerInterface $logger,
-                             UserPasswordHasherInterface $hasher, SerializerInterface $serializer,
-                             RegisterService $registerService, NotificationService $notificationService): Response
+    public function register(
+        EntityManagerInterface $entityManager,
+        Request $request,
+        LoggerInterface $logger,
+        UserPasswordHasherInterface $hasher,
+        SerializerInterface $serializer,
+        RegisterService $registerService,
+        NotificationService $notificationService
+    ): Response
     {
         try {
             if ($request->getMethod() === 'POST') {
@@ -30,7 +36,6 @@ class RegisterController extends AbstractController
                     $errors = $registerService->processValidate($data);
 
                     if (count($errors) > 0) {
-
                         $response = new JsonResponse($errors);
                         $response->setStatusCode(422);
 
@@ -50,7 +55,6 @@ class RegisterController extends AbstractController
                     $response->setStatusCode(200);
 
                     return $response;
-
                 } else {
                     $response = new JsonResponse("No data is send");
                     $response->setStatusCode(422);
@@ -58,7 +62,6 @@ class RegisterController extends AbstractController
                     return $response;
                 }
             }
-
         } catch (\Exception $exception) {
             $response = new JsonResponse('Something happened, user is not created');
             $response->setStatusCode(500);
@@ -67,6 +70,5 @@ class RegisterController extends AbstractController
         }
 
         return $response;
-
     }
 }

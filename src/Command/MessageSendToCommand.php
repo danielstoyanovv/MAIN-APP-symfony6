@@ -35,8 +35,12 @@ class MessageSendToCommand extends Command
      */
     private $containerBag;
 
-    public function __construct(EntityManagerInterface $entityManager, NotificationService $notificationService,
-                                ContainerBagInterface $containerBag, string $name = null)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        NotificationService $notificationService,
+        ContainerBagInterface $containerBag,
+        string $name = null
+    )
     {
         $this->entityManager = $entityManager;
         $this->notificationService = $notificationService;
@@ -68,7 +72,6 @@ class MessageSendToCommand extends Command
                 $user->getId(),
                 $this->containerBag->get('notification_app_url')
             );
-
         }
 
 

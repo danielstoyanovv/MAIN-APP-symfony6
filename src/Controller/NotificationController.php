@@ -14,8 +14,12 @@ use Symfony\Component\Serializer\SerializerInterface;
 class NotificationController extends AbstractController
 {
     #[Route('/api/notifications', name: 'api_notifications')]
-    public function notifications(Request $request, LoggerInterface $logger,
-                                 SerializerInterface $serializer, NotificationService $notificationService): Response
+    public function notifications(
+        Request $request,
+        LoggerInterface $logger,
+        SerializerInterface $serializer,
+        NotificationService $notificationService
+    ): Response
     {
         try {
             if ($request->getMethod() === 'GET') {
@@ -30,17 +34,21 @@ class NotificationController extends AbstractController
             $logger->error($exception->getMessage());
         }
 
-        $response = new Response( "Invalid credentials");
+        $response = new Response("Invalid credent4343ials");
         $response->setStatusCode(422);
         return $response;
     }
 
     #[Route('/api/notification', name: 'api_notification_post')]
-    public function notification(Request $request, LoggerInterface $logger,
-                                 SerializerInterface $serializer, NotificationService $notificationService): Response
+    public function notification(
+        Request $request,
+        LoggerInterface $logger,
+        SerializerInterface $serializer,
+        NotificationService $notificationService
+    ): Response
     {
         try {
-          if ($request->getMethod() === 'POST') {
+            if ($request->getMethod() === 'POST') {
                 $data = json_decode($request->getContent(), true);
                 if ($data) {
                     if (!empty($data['message'])) {
@@ -72,34 +80,34 @@ class NotificationController extends AbstractController
 
                                 return $response;
                             }
-
                         }
                     }
-
-
                 } else {
                     $response = new JsonResponse("No data is send");
                     $response->setStatusCode(422);
 
                     return $response;
                 }
-
             }
         } catch (\Exception $exception) {
             $logger->error($exception->getMessage());
         }
 
-        $response = new Response( "Invalid credentials");
+        $response = new Response("Invalid credentials");
         $response->setStatusCode(422);
         return $response;
     }
 
     #[Route('/api/notification/{id}', name: 'api_notification_update')]
-    public function notificationUpdate(Request $request, LoggerInterface $logger, SerializerInterface $serializer,
-                                       NotificationService $notificationService)
+    public function notificationUpdate(
+        Request $request,
+        LoggerInterface $logger,
+        SerializerInterface $serializer,
+        NotificationService $notificationService
+    )
     {
         try {
-            if ($request->getMethod() === 'PATCH' && !empty($request->get('id')) ) {
+            if ($request->getMethod() === 'PATCH' && !empty($request->get('id'))) {
                 $data = json_decode($request->getContent(), true);
 
                 if ($data) {
@@ -123,14 +131,13 @@ class NotificationController extends AbstractController
 
                     return $response;
                 }
-
             }
         } catch (\Exception $exception) {
             $logger->error($exception->getMessage());
         }
 
 
-        $response = new Response( "Invalid credentials");
+        $response = new Response("Invalid credentials");
         $response->setStatusCode(422);
         return $response;
     }

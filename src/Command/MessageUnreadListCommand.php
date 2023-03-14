@@ -34,8 +34,12 @@ class MessageUnreadListCommand extends Command
      */
     private $containerBag;
 
-    public function __construct(EntityManagerInterface $entityManager, NotificationService $notificationService,
-                                ContainerBagInterface $containerBag, string $name = null)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        NotificationService $notificationService,
+        ContainerBagInterface $containerBag,
+        string $name = null
+    )
     {
         $this->entityManager = $entityManager;
         $this->notificationService = $notificationService;

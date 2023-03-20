@@ -34,7 +34,7 @@ class NotificationController extends AbstractController
             $logger->error($exception->getMessage());
         }
 
-        $response = new Response("Invalid credent4343ials");
+        $response = new Response("Invalid credentials");
         $response->setStatusCode(422);
         return $response;
     }

@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: ApiTokenRepository::class)]
 #[ApiResource(
     operations: [
-        new Post(name: 'api_token_post')
+        new Post(name: 'api_login')
     ],
     normalizationContext: ['groups' => ['api_token:read']],
     denormalizationContext: ['groups' => ['api_token:write']]

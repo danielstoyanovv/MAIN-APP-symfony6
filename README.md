@@ -115,7 +115,7 @@
     curl -X 'PATCH'
     'YOUR_SITE_URL/api/notification/YOUR_NOTIFICATION_ID'
     -H 'accept: application/ld+json'
-    -H 'Content-Type: application/ld+json'
+    -H 'Content-Type: application/merge-patch+json'
     -H 'X-AUTH-TOKEN: MY_TOKEN'
     -d '{
     "content": "string",

@@ -10,30 +10,11 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class RegisterService
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
-     * @var ValidatorInterface
-     */
-    private $validator;
-
-    /**
-     * @var UserPasswordHasherInterface
-     */
-    private $userPasswordHasher;
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        ValidatorInterface $validator,
-        UserPasswordHasherInterface $userPasswordHasher
-    )
-    {
-        $this->entityManager = $entityManager;
-        $this->validator = $validator;
-        $this->userPasswordHasher = $userPasswordHasher;
+        private EntityManagerInterface $entityManager,
+        private ValidatorInterface $validator,
+        private UserPasswordHasherInterface $userPasswordHasher
+    ) {
     }
 
     /**

@@ -34,7 +34,7 @@ class LoginController extends AbstractController
                     if ($user && $hasher->isPasswordValid($user, $data['password'])) {
                         $tokenData = $apiTokenManager->createApiToken($data, $tokenGenerator, $user);
                         $entityManager->commit();
-                        return $this->json($tokenData);
+                        return $this->json($tokenData, Response::HTTP_CREATED);
                     } else {
                         return $this->json("Invalid credential", Response::HTTP_UNAUTHORIZED);
                     }

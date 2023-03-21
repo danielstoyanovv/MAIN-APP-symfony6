@@ -8,20 +8,8 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 class NotificationService
 {
-    /**
-     * @var HttpClientInterface
-     */
-    private $client;
-
-    /*
-     * CacheInterface
-     */
-    private $cache;
-
-    public function __construct(HttpClientInterface $client, CacheInterface $cache)
+    public function __construct(private HttpClientInterface $client, private CacheInterface $cache)
     {
-        $this->client = $client;
-        $this->cache = $cache;
     }
 
     /**

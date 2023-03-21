@@ -19,31 +19,12 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 )]
 class MessageUnreadListCommand extends Command
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
-     * @var NotificationService
-     */
-    private $notificationService;
-
-    /**
-     * @var ContainerBagInterface
-     */
-    private $containerBag;
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        NotificationService $notificationService,
-        ContainerBagInterface $containerBag,
+        private EntityManagerInterface $entityManager,
+        private NotificationService $notificationService,
+        private ContainerBagInterface $containerBag,
         string $name = null
-    )
-    {
-        $this->entityManager = $entityManager;
-        $this->notificationService = $notificationService;
-        $this->containerBag = $containerBag;
+    ) {
         parent::__construct($name);
     }
     protected function configure(): void

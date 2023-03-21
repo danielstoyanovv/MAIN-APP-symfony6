@@ -9,7 +9,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
@@ -20,31 +19,12 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 )]
 class MessageSendToCommand extends Command
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
-     * @var NotificationService
-     */
-    private $notificationService;
-
-    /**
-     * @var ContainerBagInterface
-     */
-    private $containerBag;
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        NotificationService $notificationService,
-        ContainerBagInterface $containerBag,
+        private EntityManagerInterface $entityManager,
+        private NotificationService $notificationService,
+        private ContainerBagInterface $containerBag,
         string $name = null
-    )
-    {
-        $this->entityManager = $entityManager;
-        $this->notificationService = $notificationService;
-        $this->containerBag = $containerBag;
+    ) {
         parent::__construct($name);
     }
 

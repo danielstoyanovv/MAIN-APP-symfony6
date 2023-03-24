@@ -34,7 +34,6 @@ class RegisterController extends AbstractController
                     if (count($errors) > 0) {
                         return $this->json($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
                     }
-
                     $user = $registerService->createUser($data);
                     $entityManager->commit();
 
@@ -45,9 +44,8 @@ class RegisterController extends AbstractController
                     );
 
                     return $this->json($user);
-                } else {
-                    return $this->json("No data is send", Response::HTTP_BAD_REQUEST);
                 }
+                return $this->json("No data is send", Response::HTTP_BAD_REQUEST);
             }
         } catch (\Exception $exception) {
             $entityManager->rollback();

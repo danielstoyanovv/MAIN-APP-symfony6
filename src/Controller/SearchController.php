@@ -20,20 +20,21 @@ class SearchController extends AbstractController
         try {
             if ($request->getMethod() === 'POST') {
                 $data = json_decode($request->getContent(), true);
+
                 if (!$data) {
                     return $this->json("No data is send", Response::HTTP_BAD_REQUEST);
-                } else {
-                    $errors = $searchService->processValidate($request->get('term'), $data);
-                    if (count($errors) > 0) {
-                        return $this->json($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
-                    } else {
-                        if ($users = $searchService->searchUsers($request->get('term'), $data)) {
-                            return $this->json($users);
-                        } else {
-                            return $this->json("No users were found");
-                        }
-                    }
                 }
+                $errors = $searchService->processValidate($request->get('term'), $data);
+
+                if (count($errors) > 0) {
+                    return $this->json($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
+                }
+
+                if ($users = $searchService->searchUsers($request->get('term'), $data)) {
+                    return $this->json($users);
+                }
+
+                return new Response(null, Response::HTTP_NO_CONTENT);
             }
         } catch (\Exception $exception) {
             $logger->error($exception->getMessage());

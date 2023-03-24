@@ -39,29 +39,31 @@ class NotificationController extends AbstractController
         try {
             if ($request->getMethod() === 'POST') {
                 $data = json_decode($request->getContent(), true);
+
                 if ($data) {
                     if (!empty($data['message'])) {
                         $errors = $notificationService->processValidateSendPrivateMessage($data);
+
                         if (count($errors) > 0) {
                             return $this->json($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
-                        } else {
-                            if ($notification = $notificationService->sendPrivateMessage($data, $this->getParameter('notification_app_url'))) {
-                                return $this->json($notification, Response::HTTP_CREATED);
-                            }
                         }
-                    } else {
-                        $errors = $notificationService->processValidate($data);
-                        if (count($errors) > 0) {
-                            return $this->json($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
-                        } else {
-                            if ($notification = $notificationService->createNotification($data, $this->getParameter('notification_app_url'))) {
-                                return $this->json($notification, Response::HTTP_CREATED);
-                            }
+
+                        if ($notification = $notificationService->sendPrivateMessage($data, $this->getParameter('notification_app_url'))) {
+                            return $this->json($notification, Response::HTTP_CREATED);
                         }
                     }
-                } else {
-                    return $this->json("No data is send", Response::HTTP_BAD_REQUEST);
+                    $errors = $notificationService->processValidate($data);
+
+                    if (count($errors) > 0) {
+                        return $this->json($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
+                    }
+
+                    if ($notification = $notificationService->createNotification($data, $this->getParameter('notification_app_url'))) {
+                        return $this->json($notification, Response::HTTP_CREATED);
+                    }
                 }
+
+                return $this->json("No data is send", Response::HTTP_BAD_REQUEST);
             }
         } catch (\Exception $exception) {
             $logger->error($exception->getMessage());
@@ -82,16 +84,16 @@ class NotificationController extends AbstractController
 
                 if ($data) {
                     $errors = $notificationService->processValidate($data);
+
                     if (count($errors) > 0) {
                         return $this->json($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
-                    } else {
-                        if ($notification = $notificationService->updateNotification($data, $request->get('id'), $this->getParameter('notification_app_url'))) {
-                            return $this->json($notification);
-                        }
                     }
-                } else {
-                    return $this->json("No data is send", Response::HTTP_BAD_REQUEST);
+
+                    if ($notification = $notificationService->updateNotification($data, $request->get('id'), $this->getParameter('notification_app_url'))) {
+                        return $this->json($notification);
+                    }
                 }
+                return $this->json("No data is send", Response::HTTP_BAD_REQUEST);
             }
         } catch (\Exception $exception) {
             $logger->error($exception->getMessage());

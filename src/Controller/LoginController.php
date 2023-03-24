@@ -28,6 +28,7 @@ class LoginController extends AbstractController
             if ($request->getMethod() === 'POST') {
                 $entityManager->beginTransaction();
                 $data = json_decode($request->getContent(), true);
+
                 if (!empty($data['email']) && !empty($data['password'])) {
                     $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
 
@@ -35,12 +36,11 @@ class LoginController extends AbstractController
                         $tokenData = $apiTokenManager->createApiToken($data, $tokenGenerator, $user);
                         $entityManager->commit();
                         return $this->json($tokenData, Response::HTTP_CREATED);
-                    } else {
-                        return $this->json("Invalid credential", Response::HTTP_UNAUTHORIZED);
                     }
-                } else {
-                    return $this->json("'email' and 'password' are required field", Response::HTTP_UNPROCESSABLE_ENTITY);
+
+                    return $this->json("Invalid credential", Response::HTTP_UNAUTHORIZED);
                 }
+                return $this->json("'email' and 'password' are required field", Response::HTTP_UNPROCESSABLE_ENTITY);
             }
         } catch (\Exception $exception) {
             $entityManager->rollback();

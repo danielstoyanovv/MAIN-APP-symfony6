@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class SearchService
 {
@@ -14,14 +15,12 @@ class SearchService
     /**
      * @param string $term
      * @param array $data
-     * @return array
+     * @return void
      */
-    public function processValidate(string $term, array $data): array
+    public function processValidate(string $term, array $data): void
     {
-        $errors = [];
-
         if (empty($term)) {
-            $errors[] = "'term' is required, example: '/api/search/email'";
+            throw new UnprocessableEntityHttpException("'term' is required, example: '/api/search/email'");
         } else {
             if (!in_array(
                 $term,
@@ -31,17 +30,18 @@ class SearchService
                     'lastName'
                 ]
             )) {
-                $errors[] = "allowed terms are: 'email', 'firstName', 'lastName'";
+                throw new UnprocessableEntityHttpException("allowed terms are: 'email', 'firstName', 'lastName'");
             }
 
             match ($term) {
-                "email" => empty($data['email']) ? $errors[] = "'email' is not supported" : null,
-                "firstName" => empty($data['firstName']) ? $errors[] = "'firstName' is not supported" : null,
-                "lastName" => empty($data['lastName']) ? $errors[] = "'lastName' is not supported" : null
+                "email" => empty($data['email']) ? throw new
+                UnprocessableEntityHttpException("'email' is not supported") : null,
+                "firstName" => empty($data['firstName']) ? throw new
+                UnprocessableEntityHttpException("'firstName' is not supported") : null,
+                "lastName" => empty($data['lastName']) ? throw new
+                    UnprocessableEntityHttpException("'lastName' is not supported") : null
             };
         }
-
-        return $errors;
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Service;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class NotificationService
 {
@@ -14,40 +15,32 @@ class NotificationService
 
     /**
      * @param array $data
-     * @return array
+     * @return void
      */
-    public function processValidate(array $data): array
+    public function processValidate(array $data): void
     {
-        $errors = [];
-
         if (empty($data['content'])) {
-            $errors[] = "'content' is required field";
+            throw new UnprocessableEntityHttpException("'content' is required field");
         }
 
         if (empty($data['type'])) {
-            $errors[] = "'type' is required field";
+            throw new UnprocessableEntityHttpException("'type' is required field");
         } else {
             if (!in_array($data['type'], ['system', 'private'])) {
-                $errors[] = "'type' should be: 'system', 'private'";
+                throw new UnprocessableEntityHttpException("'type' should be: 'system', 'private'");
             }
         }
-
-        return $errors;
     }
 
     /**
      * @param array $data
-     * @return array
+     * @return void
      */
-    public function processValidateSendPrivateMessage(array $data): array
+    public function processValidateSendPrivateMessage(array $data): void
     {
-        $errors = [];
-
         if (empty($data['to'])) {
-            $errors[] = "'to' is required field";
+            throw  new UnprocessableEntityHttpException("'to' is required field");
         }
-
-        return $errors;
     }
 
 

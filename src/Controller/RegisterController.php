@@ -29,11 +29,8 @@ class RegisterController extends AbstractController
                 $data = json_decode($request->getContent(), true);
 
                 if ($data) {
-                    $errors = $registerService->processValidate($data);
+                    $registerService->processValidate($data);
 
-                    if (count($errors) > 0) {
-                        return $this->json($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
-                    }
                     $user = $registerService->createUser($data);
                     $entityManager->commit();
 
@@ -50,6 +47,7 @@ class RegisterController extends AbstractController
         } catch (\Exception $exception) {
             $entityManager->rollback();
             $logger->error($exception->getMessage());
+            return $this->json($exception->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         return $this->json('Invalid credentials', Response::HTTP_FORBIDDEN);

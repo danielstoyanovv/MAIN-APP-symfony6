@@ -42,21 +42,13 @@ class NotificationController extends AbstractController
 
                 if ($data) {
                     if (!empty($data['message'])) {
-                        $errors = $notificationService->processValidateSendPrivateMessage($data);
-
-                        if (count($errors) > 0) {
-                            return $this->json($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
-                        }
+                        $notificationService->processValidateSendPrivateMessage($data);
 
                         if ($notification = $notificationService->sendPrivateMessage($data, $this->getParameter('notification_app_url'))) {
                             return $this->json($notification, Response::HTTP_CREATED);
                         }
                     }
-                    $errors = $notificationService->processValidate($data);
-
-                    if (count($errors) > 0) {
-                        return $this->json($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
-                    }
+                    $notificationService->processValidate($data);
 
                     if ($notification = $notificationService->createNotification($data, $this->getParameter('notification_app_url'))) {
                         return $this->json($notification, Response::HTTP_CREATED);
@@ -67,6 +59,7 @@ class NotificationController extends AbstractController
             }
         } catch (\Exception $exception) {
             $logger->error($exception->getMessage());
+            return $this->json($exception->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         return $this->json('Invalid credentials', Response::HTTP_FORBIDDEN);
@@ -83,11 +76,7 @@ class NotificationController extends AbstractController
                 $data = json_decode($request->getContent(), true);
 
                 if ($data) {
-                    $errors = $notificationService->processValidate($data);
-
-                    if (count($errors) > 0) {
-                        return $this->json($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
-                    }
+                    $notificationService->processValidate($data);
 
                     if ($notification = $notificationService->updateNotification($data, $request->get('id'), $this->getParameter('notification_app_url'))) {
                         return $this->json($notification);
@@ -97,6 +86,7 @@ class NotificationController extends AbstractController
             }
         } catch (\Exception $exception) {
             $logger->error($exception->getMessage());
+            return $this->json($exception->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         return $this->json('Invalid credentials', Response::HTTP_FORBIDDEN);

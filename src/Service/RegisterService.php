@@ -7,6 +7,7 @@ use App\Entity\User;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class RegisterService
 {
@@ -19,44 +20,40 @@ class RegisterService
 
     /**
      * @param array $data
-     * @return array
+     * @return void
      */
-    public function processValidate(array $data): array
+    public function processValidate(array $data): void
     {
-        $errors = [];
-
         if (empty($data['email'])) {
-            $errors[] = "'email' is required";
+            throw new UnprocessableEntityHttpException("'email' is required");
         } else {
             if (!$this->checkIfEmailisValid($data['email'])) {
-                $errors[] = "'email' is not valid email";
+                throw new UnprocessableEntityHttpException("'email' is not valid email");
             }
         }
 
         if ($this->checkIfUserExists($data['email'])) {
-            $errors[] = sprintf(
+            throw new UnprocessableEntityHttpException(sprintf(
                 "Email '%s' is registered already",
                 $data['email']
-            );
+            ));
         }
 
         if (empty($data['firstName'])) {
-            $errors[] = "'firstName' is required";
+            throw new UnprocessableEntityHttpException("'firstName' is required");
         }
 
         if (empty($data['lastName'])) {
-            $errors[] = "'lastName' is required";
+            throw new UnprocessableEntityHttpException("'lastName' is required");
         }
 
         if (empty($data['password'])) {
-            $errors[] = "'password' is required";
+            throw new UnprocessableEntityHttpException("'password' is required");
         } else {
             if (strlen($data['password']) < 6) {
-                $errors[] = "'password' minimum length is 6 characters";
+                throw new UnprocessableEntityHttpException("'password' minimum length is 6 characters");
             }
         }
-
-        return $errors;
     }
 
     /**

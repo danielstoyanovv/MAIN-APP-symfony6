@@ -24,11 +24,8 @@ class SearchController extends AbstractController
                 if (!$data) {
                     return $this->json("No data is send", Response::HTTP_BAD_REQUEST);
                 }
-                $errors = $searchService->processValidate($request->get('term'), $data);
 
-                if (count($errors) > 0) {
-                    return $this->json($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
-                }
+                $searchService->processValidate($request->get('term'), $data);
 
                 if ($users = $searchService->searchUsers($request->get('term'), $data)) {
                     return $this->json($users);
@@ -38,6 +35,7 @@ class SearchController extends AbstractController
             }
         } catch (\Exception $exception) {
             $logger->error($exception->getMessage());
+            return $this->json($exception->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         return $this->json('Invalid credentials', Response::HTTP_FORBIDDEN);

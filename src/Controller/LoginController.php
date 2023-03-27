@@ -12,6 +12,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Service\TokenGenerator;
 use App\Service\ApiTokenManager;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class LoginController extends AbstractController
 {
@@ -40,11 +41,12 @@ class LoginController extends AbstractController
 
                     return $this->json("Invalid credential", Response::HTTP_UNAUTHORIZED);
                 }
-                return $this->json("'email' and 'password' are required field", Response::HTTP_UNPROCESSABLE_ENTITY);
+                throw new UnprocessableEntityHttpException("'email' and 'password' are required field");
             }
         } catch (\Exception $exception) {
             $entityManager->rollback();
             $logger->error($exception->getMessage());
+            return $this->json($exception->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         return $this->json('Invalid credentials', Response::HTTP_FORBIDDEN);

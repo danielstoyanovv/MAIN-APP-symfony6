@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Service\RegisterService;
-use App\Service\NotificationService;
+use App\Event\UserRegisteredEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class RegisterController extends AbstractController
 {
@@ -19,9 +19,8 @@ class RegisterController extends AbstractController
         EntityManagerInterface $entityManager,
         Request $request,
         LoggerInterface $logger,
-        UserPasswordHasherInterface $hasher,
         RegisterService $registerService,
-        NotificationService $notificationService
+        EventDispatcherInterface $eventDispatcher
     ): Response {
         try {
             if ($request->getMethod() === 'POST') {
@@ -30,15 +29,10 @@ class RegisterController extends AbstractController
 
                 if ($data) {
                     $registerService->processValidate($data);
-
                     $user = $registerService->createUser($data);
                     $entityManager->commit();
-
-                    $notificationService->sendSystemMessage(
-                        "Welcome to our platform",
-                        $user->getId(),
-                        $this->getParameter('notification_app_url')
-                    );
+                    $event = new UserRegisteredEvent($user);
+                    $eventDispatcher->dispatch($event, UserRegisteredEvent::NAME);
 
                     return $this->json($user);
                 }
